@@ -13,15 +13,16 @@ void menu()
     cout << "name\t : afficher votre pseudo" << endl;
     cout << "chname\t : changer de pseudo" << endl;
     cout << "help\t : afficher l'aide (ce menu)" << endl;
+    cout << "rules\t : afficher les regles du jeu" << endl;
 }
 
 
 void print_user_board(int user_board[], string name_user)  // affichage des bateaux de l'utilisateur
 {
     cout << "\n\n--- " << name_user << " board ---" << endl;
-    for (int a = 0; a < 8; a+=3)
+    for (int a = 0; a < 99; a+=10)
     {
-        for (int i = a ; i < (a+3) ; i++)
+        for (int i = a ; i < (a+10) ; i++)
         {
             if(user_board[i] == 0)  // designe la mer
             {
@@ -50,9 +51,9 @@ void print_user_board(int user_board[], string name_user)  // affichage des bate
 void print_bot_board(int bot_board[], string name_bot)  // affichage des points touchés par l'utilisateur
 {
     cout << "--- " << name_bot << " board ---" << endl;
-    for (int a = 0; a < 8; a += 3)
+    for (int a = 0; a < 99; a += 10)
     {
-        for (int i = a; i < (a+3); i++)
+        for (int i = a; i < (a+10); i++)
         {
             if(bot_board[i] == 0) // case inconnue
             {
@@ -74,17 +75,19 @@ void print_bot_board(int bot_board[], string name_bot)  // affichage des points 
 void debug_position_boat(int boat[])
 {
     cout << "\n" << endl;
-    for(int y = 0; y < 3; y++)  // (debeug): Affiche les positions des pièces ennemies
+    for(int y = 0; y < 10; y++)  // (debeug): Affiche les positions des pièces ennemies
     {
         cout << boat[y] << " = boat[" << y << "]" << endl;
     }
     cout << "\n" << endl;
+    system("pause");
 }
 
 void game_rules() // Afficher les règles du Jeu
 {
         cout << "Regles du jeu :" << endl;
-        cout << "Pfffff....." << endl;
+        cout << "https://fr.wikipedia.org/wiki/Bataille_navale_(jeu)" << endl;
+        cout << "\t(.-.)" << endl;
 }
 
 int main()
@@ -95,11 +98,18 @@ int main()
     namelist[1] = "Bender";
     namelist[2] = "nightBot";
     namelist[3] = "MEE6";
-    int id_name_bot(0), user_score(0), bot_score(0), max_score(4)/*modify*/, user_board[9], bot_board[9], bot_printed_board[9], boat[3], choix(10), i_rep(0);
+    int id_name_bot(0), user_score(0), bot_score(0), user_board[100], bot_board[100], bot_printed_board[100], boat[10], choix(10), i_rep(0);
     string action_choice = "idk";
     boat[0] = 0;
     boat[1] = 0;
     boat[2] = 0;
+    boat[3] = 0;
+    boat[4] = 0;
+    boat[5] = 0;
+    boat[6] = 0;
+    boat[7] = 0;
+    boat[8] = 0;
+    boat[9] = 0;
 
     srand((unsigned int)time(0));
     cout << "Quel est ton pseudo ?" << endl;
@@ -118,6 +128,7 @@ int main()
         {
             cout << "\n\nFermeture du programme." << endl;
             endgame = false;
+            return 0;  // Flemme
         }
         else if (action_choice == "start") // Lancer une partie
         {
@@ -127,36 +138,35 @@ int main()
             cout << name_user << " tu vas jouer contre le bot " << name_bot << endl;
 
             // Définition des positions des bateaux
-            while(boat[0] == boat[1] || boat[0] == boat[2] || boat[1] == boat[2])  // Tant que les bateaux ne sont pas tous à des positions différentes, on relance l'attribution des positions
+            boat[0] = rand()%99;
+            for (int i = 1 ; i < 10; i++)  // Attribution des positions
             {
-                for (int i = 0 ; i < 3; i++)  // Attribution des positions
-                {
-                    boat[i] = rand()%8;
-                }
+
+                boat[i] = rand()%99;
             }
 
-            // debug_position_boat(boat);  // Affiche les coordonnées de tous les bateaux
+            debug_position_boat(boat);  // Affiche les coordonnées de tous les bateaux
 
-            for (int i = 0 ; i <= 8 ; i++)  // remplissage(0)/reset de la planche de jeu
+            for (int i = 0 ; i <= 99 ; i++)  // remplissage(0)/reset de la planche de jeu
             {
                 user_board[i] = 0;
                 bot_board[i] = 0;
                 bot_printed_board[i] = 0;
             }
-            for (int y = 0; y < 3; y++)  // Placement des bateaux en fonction de leur coordonnée.
+            for (int y = 0; y < 10; y++)  // Placement des bateaux en fonction de leur coordonnée.
             {
                 bot_board[boat[y]] = 1;
             }
-            while (user_score < 3 && bot_score < 3)
+            while (user_score < 10 && bot_score < 10)
             {
                 for (int e = 0 ; e < 1 ; e++)  // affichage de la planche de jeu
                 {
                     // print_user_board(&user_board[e], name_user);  // affichage de la planche utlisateur
                     print_bot_board(&bot_printed_board[e], name_bot);
                 }
-                while (choix < 0 || choix > 8)
+                while (choix < 0 || choix > 99)  // Ne pas mettre autre chose que ce qui est attendu sinon ca loop(e)
                 {
-                    cout << name_user << ", sur quelle case voulez tirer ?\n> ";
+                    cout << name_user << ", sur quelle case voulez-vous tirer ?\n> ";
                     cin >> choix;
                     system("CLS");  // Faut il le garder ?
                 }
@@ -183,7 +193,7 @@ int main()
                 system("CLS");
             }
             //Fin de la partie reset des plateaux
-            for (int i = 0 ; i <= 8 ; i++)
+            for (int i = 0 ; i <= 99 ; i++)
             {
                 user_board[i] = 0;
                 bot_board[i] = 0;
@@ -192,6 +202,13 @@ int main()
             boat[0] = 0;
             boat[1] = 0;
             boat[2] = 0;
+            boat[3] = 0;
+            boat[4] = 0;
+            boat[5] = 0;
+            boat[6] = 0;
+            boat[7] = 0;
+            boat[8] = 0;
+            boat[9] = 0;
             bot_score = 0;
             user_score = 0;
         }
@@ -220,6 +237,8 @@ int main()
             cout << "Erreur: Mauvaise saisie." << endl;
             action_choice = "idk";
         }
+        cout << "\n\n===\n\n" << endl;
+        system("pause");
         system("CLS");
     }
     return 0;
