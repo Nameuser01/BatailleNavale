@@ -5,6 +5,7 @@
 
 using namespace std;
 
+
 void menu()
 {
     cout << "---------- Menu de selection ----------\n" << endl;
@@ -72,6 +73,7 @@ void print_bot_board(int bot_board[], string name_bot)  // affichage des points 
     }
 }
 
+
 void debug_position_boat(int boat[])
 {
     cout << "\n" << endl;
@@ -83,12 +85,14 @@ void debug_position_boat(int boat[])
     system("pause");
 }
 
+
 void game_rules() // Afficher les règles du Jeu
 {
         cout << "Regles du jeu :" << endl;
         cout << "https://fr.wikipedia.org/wiki/Bataille_navale_(jeu)" << endl;
         cout << "\t(.-.)" << endl;
 }
+
 
 int main()
 {
@@ -98,7 +102,7 @@ int main()
     namelist[1] = "Bender";
     namelist[2] = "nightBot";
     namelist[3] = "MEE6";
-    int id_name_bot(0), user_score(0), bot_score(0), user_board[100], bot_board[100], bot_printed_board[100], boat[10], choix(10), i_rep(0);
+    int id_name_bot(0), user_score(0), bot_score(0), user_board[100], bot_board[100], bot_printed_board[100], boat[10], choix(100), i_rep(0);
     string action_choice = "idk";
     boat[0] = 0;
     boat[1] = 0;
@@ -123,7 +127,7 @@ int main()
         cout << "\n\nQue voulez vous faire ?" << endl;
         cout << "> ";
         cin >> action_choice;
-        cout << "\n\n" << endl;
+        system("CLS");
         if (action_choice == "q" or action_choice == "quit" or action_choice == "exit")  // Quitter le jeu
         {
             cout << "\n\nFermeture du programme." << endl;
@@ -139,13 +143,35 @@ int main()
 
             // Définition des positions des bateaux
             boat[0] = rand()%99;
-            for (int i = 1 ; i < 10; i++)  // Attribution des positions
+            int u = 1, tmp = 0;
+            bool isokay = true;
+            while (u < 10)
             {
-
-                boat[i] = rand()%99;
+                boat[u] = rand()%99;
+                for (int m = 0; m < (u - 1) ; m++)
+                {
+                    if (boat[u] != boat[m])
+                    {
+                        // cout << "Debeug_msg: Is ok!" << endl;
+                    }
+                    else
+                    {
+                        // cout << "Debeug_msg: Isn't ok!" << endl;
+                        isokay = false;
+                    }
+                }
+                if (isokay == true)
+                {
+                    u++;
+                }
+                else
+                {
+                    // cout << "Debeug : on doit retirer une valeur" << endl;
+                }
+                isokay = true;
             }
 
-            debug_position_boat(boat);  // Affiche les coordonnées de tous les bateaux
+            // debug_position_boat(boat);  // Affiche les coordonnées de tous les bateaux
 
             for (int i = 0 ; i <= 99 ; i++)  // remplissage(0)/reset de la planche de jeu
             {
@@ -157,40 +183,37 @@ int main()
             {
                 bot_board[boat[y]] = 1;
             }
-            while (user_score < 10 && bot_score < 10)
+            while (user_score < 10 && bot_score < 10)  // Boucle principale pour le jeu (pour l'utilisateur)
             {
                 for (int e = 0 ; e < 1 ; e++)  // affichage de la planche de jeu
                 {
                     // print_user_board(&user_board[e], name_user);  // affichage de la planche utlisateur
                     print_bot_board(&bot_printed_board[e], name_bot);
                 }
-                while (choix < 0 || choix > 99)  // Ne pas mettre autre chose que ce qui est attendu sinon ca loop(e)
+                while (choix < 0 || choix > 99)  // Ne pas mettre autre chose que ce qui est attendu sinon ca boucle à l'infini
                 {
                     cout << name_user << ", sur quelle case voulez-vous tirer ?\n> ";
                     cin >> choix;
-                    system("CLS");  // Faut il le garder ?
                 }
-
+                system("CLS");
                 if (bot_board[choix] == 0)  // Eau
                 {
                     bot_board[choix] = 2;
                     bot_printed_board[choix] = 2;
-                    cout << "\nLoup\202 !\n" << endl;
+                    cout << choix << " = loup\202 !\n" << endl;
                 }
                 else if (bot_board[choix] == 1)  // Ennemi touché
                 {
                     bot_board[choix] = 1;
                     bot_printed_board[choix] = 1;
                     user_score += 1;
-                    cout << "\nTouch\202 !\n" << endl;
+                    cout << choix << " = touch\202 !\n" << endl;
                 }
                 else  // Normalement impossible d'arriver ici
                 {
-                    cout << "Erreur de condition" << endl;
+                    cout << "Erreur de condition !" << endl;
                 }
-                choix = 10;
-                system("pause");
-                system("CLS");
+                choix = 100;
             }
             //Fin de la partie reset des plateaux
             for (int i = 0 ; i <= 99 ; i++)
@@ -225,10 +248,9 @@ int main()
         }
         else if (action_choice == "rules")  // Afficher les regles du jeu
         {
-            cout << "\n" << endl;
             game_rules();
         }
-        else if (action_choice == "menu")  // afficher le menu
+        else if (action_choice == "help")  // afficher le menu
         {
             menu();
         }
